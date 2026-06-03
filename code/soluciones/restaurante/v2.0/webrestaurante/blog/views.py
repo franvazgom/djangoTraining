@@ -4,7 +4,6 @@ from .models import Post, Category
 
 def blog(request):
     posts = Post.objects.all()
-    breakpoint()
     return render(request, 'blog/post_list.html', {'posts': posts})
 
 
