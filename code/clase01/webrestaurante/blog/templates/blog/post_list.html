@@ -1,0 +1,32 @@
+{% extends "core/base.html" %}
+{% block content  %}
+<section class="page-section cta">
+    <div class="container">
+        {% for post in posts %}
+            <div class="row">
+                <div class="col-xl-9 mx-auto">
+                <div class="cta-innerv text-center rounded">
+                    <h2 class="section-heading mb-5">
+                        <span class="section-heading-upper">{{ post.published }}</span>
+                        <span class="section-heading-lower">{{ post.title }}</span>
+                    </h2>
+                    <p class="mb-0">
+                        <img class="mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{ post.image.url }}" alt="">
+                    </p>
+                    <p class="mb-0 mbt">
+                        {{ post.content }}
+                    </p>
+                    <p class="mb-0 mbt">
+                        <span class="section-heading-under">Publicado por <em><b>{{ post.author.first_name }}</b></em> en <em>
+                            {% for category in post.categories.all %}
+                                <a href="#"class="link">{{ category.name }}</a> {% if not forloop.last %} , {% endif %}
+                            {% endofor %}
+                        </em></span>
+                    </p>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+  </section>
+{% endblock  %}
