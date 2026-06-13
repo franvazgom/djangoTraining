@@ -8,6 +8,12 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class PostAdmin(admin.ModelAdmin):
     readonly_fields = ('created', 'updated',)
+    list_display = ('title', 'author_name', 'published',)
+    search_fields = ('title', 'categories__name', 'author__first_name',)
+    date_hierarchy = 'published'
+
+    def author_name(self, obj):
+        return obj.author.first_name + " " + obj.author.last_name
 
 
 admin.site.register(Category, CategoryAdmin)

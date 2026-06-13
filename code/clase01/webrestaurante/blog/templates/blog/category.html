@@ -2,7 +2,7 @@
 {% block content  %}
 <section class="page-section cta">
     <div class="container">
-        {% for post in posts %}
+        {% for post in category.get_posts.all %}
             {% include "blog/blog.html" %}
         {% endfor %}
     </div>
