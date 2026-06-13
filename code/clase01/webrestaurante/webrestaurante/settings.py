@@ -27,8 +27,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_cleanup',
+    'django_ckeditor_5',
     'core',
     'blog',
+    'pages',
 ]
 
 MIDDLEWARE = [
@@ -109,3 +111,16 @@ STATIC_URL = 'static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': {
+            'items': [
+                'heading', '|',
+                'bold', 'italic', 'link',
+                'bulletedList', 'numberedList',
+                'blockQuote', 'imageUpload',
+            ],
+        },
+    },
+}
