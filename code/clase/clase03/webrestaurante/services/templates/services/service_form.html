@@ -1,0 +1,21 @@
+<section class="page-section about-heading">
+    <div class="container">      
+        <div class="row mt-3">
+          <div class="col-md-9 mx-auto text-light ">
+            <div>                            
+              <form action='' method='post' novalidate enctype='multipart/form-data'>
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <br>
+                {{ form.media }}
+                <div class="text-center">
+                  <input type="submit" class="btn btn-primary btn-block py-2" value="{{ btn_action }}">
+                </div>
+              </form>              
+            </div>
+          </div>
+        </div>      
+    </div>
+  </section>
