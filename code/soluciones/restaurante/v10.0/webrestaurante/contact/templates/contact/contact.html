@@ -11,8 +11,10 @@
               <h2 class="section-heading mb-4">
                 <span class="section-heading-upper">Envíanos tus dudas</span>
                 <span class="section-heading-lower">Contacto</span>
-              </h2>                            
+              </h2>
+              <a href="#" id='btnCountries' class="btn btn-primary">Consultar países</a> 
               <select name="country" id="country" class="text-primary"></select>
+              <select name="city" id="city" class="text-primary"></select>
               <!-- Formulario de contacto -->
               <form action='' method='post' novalidate>
                 {% csrf_token %}
@@ -64,6 +66,73 @@
     }
     return null; 
   }
+
+  async function exec_service_rest(url, method_exec, data) {
+    let answer;
+    if (method_exec === 'GET') {
+      answer = await fetch(url)
+    }else {
+      answer = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data) // Convierte el objeto JS a String
+      });
+    }
+    if (!answer.ok) {
+        throw new Error(`Error en el servidor: ${answer.status} - ${answer.statusText}`);
+    }    
+    return await answer.json();
+  }
+  
+  async function getCountries() {
+    try {
+      const data = await exec_service_rest('/contact/get_countries/', 'GET', {})
+      const selectElement = document.getElementById('country'); 
+      selectElement.innerHTML = ''; 
+      for (let country of data.countries) {
+        let newOption = document.createElement('option'); 
+        newOption.value = country; 
+        newOption.text = country; 
+        selectElement.appendChild(newOption); 
+      }
+    } catch (error) {
+      console.error(error); 
+    } finally { }    
+  }
+
+  async function getCities() {    
+    try {
+      const selectCountry = document.getElementById('country'); 
+      const selectCity = document.getElementById('city'); 
+      const country = selectCountry.value;
+      const data = await exec_service_rest('/contact/get_cities/', 'POST', {'country':country})
+      console.log(data)
+      selectCity.innerHTML = ''; 
+      for (let city of data.cities) {
+        let newOption = document.createElement('option'); 
+        newOption.value = city; 
+        newOption.text = city; 
+        selectCity.appendChild(newOption); 
+      }
+    } catch (error) {
+      console.error(error); 
+    } finally { }    
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btnCountries = document.getElementById('btnCountries'); 
+    btnCountries.addEventListener('click', getCountries); 
+    //getCountries(); 
+
+    const selectCountry = document.getElementById('country'); 
+    selectCountry.addEventListener('change', getCities);
+  });
+
+  /* 
+  
   
   function exec_service_rest(url, method, data) {
     return new Promise((resolve, reject) => {
@@ -115,6 +184,7 @@
     // btnCountries.addEventListener('click', getCountries); 
     getCountries(); 
   });
+  */
 
 </script>
 {% endblock %}
