@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from contact.forms import ContactForm
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods, require_POST
+import json
 
 
 def contact(request):
@@ -35,7 +36,8 @@ def get_countries(request):
 
 @require_POST
 def get_cities(request):
-    country = request.POST.get('country', '')
+    data = json.loads(request.body)
+    country = data.get('country', '')
     print(f'Pais: {country}')
     if country == 'México':
         cities = ['Ciudad de México', 'Guadalajara', 'Monterrey']

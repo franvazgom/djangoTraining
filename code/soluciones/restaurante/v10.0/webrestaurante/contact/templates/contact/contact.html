@@ -68,7 +68,7 @@
   }
 
   async function exec_service_rest(url, method_exec, data) {
-    let answer;
+    let answer; 
     if (method_exec === 'GET') {
       answer = await fetch(url)
     }else {
@@ -98,6 +98,7 @@
         newOption.text = country; 
         selectElement.appendChild(newOption); 
       }
+      getCities(); 
     } catch (error) {
       console.error(error); 
     } finally { }    
@@ -106,10 +107,9 @@
   async function getCities() {    
     try {
       const selectCountry = document.getElementById('country'); 
-      const selectCity = document.getElementById('city'); 
-      const country = selectCountry.value;
-      const data = await exec_service_rest('/contact/get_cities/', 'POST', {'country':country})
-      console.log(data)
+      const selectCity = document.getElementById('city');  
+      const data = await exec_service_rest('/contact/get_cities/', 'POST', 
+        {'country':selectCountry.value}); 
       selectCity.innerHTML = ''; 
       for (let city of data.cities) {
         let newOption = document.createElement('option'); 
@@ -123,68 +123,12 @@
   }
 
   document.addEventListener('DOMContentLoaded', function(){
+    //getCountries();
     const btnCountries = document.getElementById('btnCountries'); 
-    btnCountries.addEventListener('click', getCountries); 
-    //getCountries(); 
-
+    btnCountries.addEventListener('click', getCountries);  
     const selectCountry = document.getElementById('country'); 
     selectCountry.addEventListener('change', getCities);
   });
-
-  /* 
-  
-  
-  function exec_service_rest(url, method, data) {
-    return new Promise((resolve, reject) => {
-      const csrftoken = getCookie('csrftoken'); 
-      const xhr = new XMLHttpRequest(); 
-      xhr.open(method, url, true); 
-      xhr.setRequestHeader('Content-Type', 'application/json'); 
-      xhr.setRequestHeader('X-CSRFToken', csrftoken); 
-      xhr.timeout = 5000; 
-      xhr.onload = function(){
-        if (xhr.status === 200) {
-          try {
-            const resJSON = JSON.parse(xhr.responseText); 
-            resolve(resJSON)
-          } catch (error) {
-            reject (new Error('Error al parsear la respuesta JSON'))
-          }
-        }
-      };
-      xhr.onerror = function()  {
-        reject(new Error('Error en la red')); 
-      }; 
-      xhr.ontimeout = function()  {
-        reject(new Error('Tiempo de espera agotado')); 
-      }; 
-      xhr.send(JSON.stringify(data)); 
-    }); 
-  }
-
-  function getCountries() {
-    exec_service_rest('/contact/get_countries/', 'GET', {})
-    .then((data)=> {      
-      const selectElement = document.getElementById('country'); 
-      selectElement.innerHTML = ''; 
-      for (let country of data.countries) {
-        let newOption = document.createElement('option'); 
-        newOption.value = country; 
-        newOption.text = country; 
-        selectElement.appendChild(newOption); 
-      }
-    })
-    .catch((error)=> {
-      console.error(error); 
-    }); 
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    // const btnCountries = document.getElementById('btnCountries'); 
-    // btnCountries.addEventListener('click', getCountries); 
-    getCountries(); 
-  });
-  */
 
 </script>
 {% endblock %}
