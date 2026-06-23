@@ -5,4 +5,5 @@ contact_urlpatterns = ([
     path('', views.contact, name='contact'),
     path('thanks/', views.thanks, name='thanks'),
     path('get_countries/', views.get_countries, name='countries'),
+    path('get_cities/', views.get_cities, name='cities'),
 ], 'contact')
