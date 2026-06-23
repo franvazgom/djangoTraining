@@ -41,13 +41,20 @@ def delete(request, service_id):
 
 def order_request(request):
     order = list()
-    if request.method == 'POST':
-        try:
-            data_order = json.loads(request.POST['data_order'])
-            for key, qty in data_order.items():
-                service = Service.objects.get(pk=int(key))
-                sub_total = service.cost * qty
-        except json.JSONDecodeError as e:
-            print(f"Error parsing. Details: {e}")                
-        breakpoint()
-    return render(request, 'services/service_list.hmtl')
+    total = 0
+    try:
+        data_order = json.loads(request.POST['data_order'])
+        for key, qty in data_order.items():
+            detail = {}
+            service = Service.objects.get(pk=int(key))
+            detail['title'] = service.title
+            detail['cost'] = service.cost
+            detail['qty'] = qty
+            detail['sub_total'] = service.cost * qty
+            total += detail['sub_total']
+            order.append(detail)
+    except json.JSONDecodeError as e:
+        print(f"Error parsing. Details: {e}")                
+    request.session['total_order'] = total
+    request.session['detail_order'] = order
+    return render(request, 'services/detail_order.html', {'order':order, 'total':total})
