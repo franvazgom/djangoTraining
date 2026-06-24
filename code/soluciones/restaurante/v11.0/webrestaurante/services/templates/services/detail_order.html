@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+{% block content %}
+{% load static %}  
+    <div class="container">
+      <div class="row mt-2">
+        <div class="col-md-9 mx-auto">
+            <table class="table table-dark table-striped table-bordered">
+                <thead class="text-white text-center">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody class="text-white">
+                    {% for product in order %}
+                      <tr>
+                        <td>{{product.title}}</td>
+                        <td style='text-align:right;' >{{product.qty}}</td>
+                        <td style='text-align:right;' >{{product.cost}}</td>
+                        <td style='text-align:right;'>$ {{product.sub_total}}</td>                        
+                      </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-7"></div>
+        <div class="col-md-2 mx-auto mb-2">
+          <div style='text.align:right'>
+            <span class="text-white">Total = $ {{total}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-9 mx-auto mb-1">
+          <div id='button_submit' style='text-align:right;'>
+            <a href="XXXX" class="btn text-white form-btn mx-1">
+              <span class="spinner-border spinner-border-sm"></span>
+              Confirmar pedido<i class="fas fa-paper-plane fa-fw"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock  %}
+{% block contentJS %}
+  <script>
+
+  </script>
+{% endblock contentJS %}
