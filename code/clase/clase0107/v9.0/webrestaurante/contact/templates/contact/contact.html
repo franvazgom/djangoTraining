@@ -121,13 +121,15 @@
       console.error(error); 
     } finally { }    
   }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    //getCountries();
-    const btnCountries = document.getElementById('btnCountries'); 
-    btnCountries.addEventListener('click', getCountries);  
+  
+  function inicia(){
+    getCountries();
+    // const btnCountries = document.getElementById('btnCountries'); 
+    // btnCountries.addEventListener('click', getCountries);  
     const selectCountry = document.getElementById('country'); 
     selectCountry.addEventListener('change', getCities);
-  });
+  }
+
+  document.addEventListener('DOMContentLoaded', inicia);
 </script>
 {% endblock %}

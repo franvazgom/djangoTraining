@@ -57,6 +57,11 @@
           <li class="nav-item px-lg-4 {% if request.path|slice:':6' == '/blog/' %}active{% endif %}">
             <a class="nav-link text-uppercase text-expanded" href=" {% url 'blog:post' %} ">Blog</a>
           </li>
+          <li class="nav-item px-lg-4">
+              <a class="nav-link text-secondary" href="#" onclick="orderView();" >
+                  <i class="fas fa-shopping-cart"> <span id="cart-badge" class="badge badge-danger">0</span> </i>
+              </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -98,6 +103,12 @@
       <p class="m-0 mbt1">&copy; La Recova <span id="year"></span></p>
     </div>
   </footer>
+
+  <form id="data_form" action="{% url 'services:order_request' %}" method="post" >
+    {% csrf_token %}
+    <input type="hidden" name="data_order" id="data_order" />
+  </form>
+
   <!-- Bootstrap JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
     integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
@@ -109,6 +120,42 @@
   <script>
     // Get the current year for the copyright
     $("#year").text(new Date().getFullYear());    
+
+    if (localStorage.getItem('cart') === null) {
+      localStorage.clear(); 
+      var cart = {};
+    } else {
+      cart = JSON.parse(localStorage.getItem('cart')); 
+      showBadgeCart(); 
+    }
+
+    function showBadgeCart(){
+      var totalItems = 0; 
+      for (var item in cart) {
+        totalItems += parseInt(cart[item]); 
+      }
+      const cartBadge = document.getElementById('cart-badge'); 
+      cartBadge.innerText = totalItems.toString(); 
+    }   
+
+    function addCart(id) {
+      if (cart[id] != undefined) {
+        cart[id] += 1; 
+      } else {
+        cart[id] = 1; 
+      }
+      localStorage.setItem('cart', JSON.stringify(cart)); 
+      showBadgeCart(); 
+    }
+
+    function orderView(){    
+      cart_str = localStorage.getItem('cart');       
+      const dataOrder = document.getElementById('data_order');
+      const dataForm = document.getElementById('data_form');
+      dataOrder.value = cart_str;
+      dataForm.submit(); 
+    }    
+
   </script>
   {% block contentJS %} {% endblock %}
 </body>

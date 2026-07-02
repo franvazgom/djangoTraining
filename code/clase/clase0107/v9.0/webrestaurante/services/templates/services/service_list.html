@@ -19,10 +19,14 @@
             <div class="bg-faded p-5 rounded">                
                 {{service.content|safe}}
                 <br>
+                <p class="text-secondary text-end">
+                    ${{service.cost}}
+                </p>                
                 {% if request.user.is_staff %}
                     <a href="{% url 'services:update' service.id %}">Ver detalle</a>  &nbsp;&nbsp;
                     <a href="{% url 'services:delete' service.id %}">Eliminar</a>
                 {% endif %}
+                <a class="btn btn-primary" onclick="addCart({{ service.id }});" >Agrega al carrito</a>
             </div>
             </div>
         </div>
