@@ -1,0 +1,133 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+  <section class="page-section about-heading">
+    <div class="container">
+      <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src=" {% static 'core/img/contact.jpg' %}" alt="">
+      <div class="about-heading-content">
+        <div class="row">
+          <div class="col-xl-9 col-lg-10 mx-auto">
+            <div class="bg-faded rounded p-5">
+              <h2 class="section-heading mb-4">
+                <span class="section-heading-upper">Envíanos tus dudas</span>
+                <span class="section-heading-lower">Contacto</span>
+              </h2>
+              <a href="#" id='btnCountries' class="btn btn-primary">Consultar países</a>                            
+              <select name="country" id="country" class="text-primary"></select>
+              <select name="city" id="city" class="text-primary"></select>
+              <!-- Formulario de contacto -->
+              <form action='' method='post' novalidate>
+                {% csrf_token %}
+                <div class="form-group">                  
+                  <div class="input-group">
+                    {{ form.name }}                    
+                  </div>
+                  <div class="errores">
+                      {{ form.name.errors }}
+                  </div>
+                </div>
+                <div class="form-group">                  
+                  <div class="input-group">
+                    {{ form.email }}                    
+                  </div>
+                  <div class="errores">
+                      {{ form.email.errors }}
+                  </div>
+                </div>
+                <div class="form-group">                  
+                  <div class="input-group">
+                    {{ form.content }}                    
+                  </div>
+                  <div class="errores">
+                      {{ form.content.errors }}
+                  </div>
+                </div>
+                <div class="text-center">
+                  <input type="submit" class="btn btn-primary btn-block py-2" value="Enviar">
+                </div>
+              </form>              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block contentJS %}
+<script>
+  function getCookie(name) {
+    let cookieArr = document.cookie.split(';');
+    for (let i=0; i<cookieArr.length; i++) {
+      let cookiePair = cookieArr[i].split('=');
+      if (name === cookiePair[0].trim()) {
+        return decodeURIComponent(cookiePair[1]); 
+      }
+    }
+    return null; 
+  }
+
+  async function exec_service_rest(url, method_exec, data) {
+    let answer; 
+    if (method_exec === 'GET') {
+      answer = await fetch(url)
+    }else {
+      answer = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data) // Convierte el objeto JS a String
+      }); 
+    }
+    if (!answer.ok) {
+        throw new Error(`Error en el servidor: ${answer.status} - ${answer.statusText}`);
+    }    
+    return await answer.json();
+  }
+  
+  async function getCountries() {
+    try {
+      const data = await exec_service_rest('/contact/get_countries/', 'GET', {})
+      const selectElement = document.getElementById('country'); 
+      selectElement.innerHTML = ''; 
+      for (let country of data.countries) {
+        let newOption = document.createElement('option'); 
+        newOption.value = country; 
+        newOption.text = country; 
+        selectElement.appendChild(newOption); 
+      }
+      getCities(); 
+    } catch (error) {
+      console.error(error); 
+    } finally { }    
+  }
+
+  async function getCities() {    
+    try {
+      const selectCountry = document.getElementById('country'); 
+      const selectCity = document.getElementById('city');  
+      const data = await exec_service_rest('/contact/get_cities/', 'POST', 
+        {'country':selectCountry.value}); 
+      selectCity.innerHTML = ''; 
+      for (let city of data.cities) {
+        let newOption = document.createElement('option'); 
+        newOption.value = city; 
+        newOption.text = city; 
+        selectCity.appendChild(newOption); 
+      }
+    } catch (error) {
+      console.error(error); 
+    } finally { }    
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    //getCountries();
+    const btnCountries = document.getElementById('btnCountries'); 
+    btnCountries.addEventListener('click', getCountries);  
+    const selectCountry = document.getElementById('country'); 
+    selectCountry.addEventListener('change', getCities);
+  });
+</script>
+{% endblock %}
