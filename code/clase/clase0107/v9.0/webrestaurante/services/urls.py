@@ -6,4 +6,7 @@ services_urlpatterns = ([
     path('create/', views.create, name='create'),
     path('update/<int:service_id>', views.update, name='update'),
     path('delete/<int:service_id>', views.delete, name='delete'),
+    path('order_request/', views.order_request, name='order_request'),
+    path('order_create/', views.order_create, name='order_create'),
+    path('order_thanks/', views.order_thanks, name='thanks'),
 ], 'services')

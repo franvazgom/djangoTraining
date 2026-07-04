@@ -23,3 +23,20 @@ class Service(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Order(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Nombre')
+    address = models.CharField(max_length=200, verbose_name="Dirección")
+    total = models.DecimalField(
+        verbose_name='Total', max_digits=8, decimal_places=2)
+    email = models.EmailField(verbose_name='Email')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Fecha')
+
+    class Meta:
+        verbose_name = 'Pedido'
+        verbose_name_plural = 'Pedidos'
+        ordering = ['-date']
+
+    def __str__(self):
+        return str(self.id)

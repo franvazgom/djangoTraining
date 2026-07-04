@@ -22,7 +22,8 @@
                 <p class="text-secondary text-end">
                     ${{service.cost}}
                 </p>                
-                {% if request.user.is_staff %}
+                {% comment %} {% if request.user.is_staff %} {% endcomment %}
+                {% if perms.services.change_service %}
                     <a href="{% url 'services:update' service.id %}">Ver detalle</a>  &nbsp;&nbsp;
                     <a href="{% url 'services:delete' service.id %}">Eliminar</a>
                 {% endif %}

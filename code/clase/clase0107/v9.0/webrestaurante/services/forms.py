@@ -1,5 +1,5 @@
-from django.forms import ModelForm, TextInput, Textarea, NumberInput
-from services.models import Service
+from django.forms import ModelForm, TextInput, Textarea, NumberInput, EmailInput
+from services.models import Service, Order
 from django_ckeditor_5.widgets import CKEditor5Widget
 
 
@@ -20,3 +20,15 @@ class ServiceForm(ModelForm):
         if len(title) < 5:
             self._errors['title'] = self.error_class(['Mínimo 5 caracteres'])
         return self.cleaned_data
+
+
+class OrderForm (ModelForm):
+    class Meta:
+        model = Order
+        fields = ['name', 'address', 'total', 'email', ]
+        widgets = {
+            'name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre'}),
+            'address': TextInput(attrs={'class': 'form-control', 'placeholder': 'Dirección'}),
+            'email': EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+            'total': TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+        }

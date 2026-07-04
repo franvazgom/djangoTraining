@@ -1,4 +1,5 @@
-{% if request.user.is_staff %}
+{% comment %} {% if request.user.is_staff %} {% endcomment %}
+{% if perms.services.change_service %}
     <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="SecondNav">
         <div class="container">
             <span class="navbar-brand"> <i>Servicios</i></span>
