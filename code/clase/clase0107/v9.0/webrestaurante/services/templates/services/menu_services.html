@@ -1,0 +1,19 @@
+{% comment %} {% if request.user.is_staff %} {% endcomment %}
+{% if perms.services.change_service %}
+    <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="SecondNav">
+        <div class="container">
+            <span class="navbar-brand"> <i>Servicios</i></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarServices"
+                aria-controls="navbarServices" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarServices">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'services:create' %}"> + Nuevo servicio</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endif %}
