@@ -8,7 +8,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass() 
-        PATH_WEB_DRIVER = r'C:\Users\Francisco\Downloads\chromedriver-win64\chromedriver.exe'
+        PATH_WEB_DRIVER = r'D:\devenv\chromedriver-win64\chromedriver.exe'
+        # PATH_WEB_DRIVER = r'C:\Users\Francisco\Downloads\chromedriver-win64\chromedriver.exe'
         cls.service = Service(PATH_WEB_DRIVER)
         cls.selenium = webdriver.Chrome(service=cls.service)
         cls.selenium.set_window_size(1200, 800)        
@@ -20,11 +21,11 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
     def test_google(self):        
         browser = self.selenium
-        url = "https://google.com"
+        url = "https://google.com"        
         browser.get(url)                
         self.assertIn('Google', browser.title)
-        caja = browser.find_element(By.ID, 'APjFqb')
+        caja = browser.find_element(By.ID, 'APjFqb')        
         caja.send_keys("PERROS GIGANTES")
         time.sleep(1)
         caja.submit()    
-        time.sleep(3)    
+        time.sleep(10)    
